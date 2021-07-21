@@ -5,7 +5,7 @@ createSubsetCdmFromCohort <- function(connectionDetails,
                                       cohortDatabaseSchema,
                                       cohortTable) {
 
-  sql <- SqlRender::readSql(system.file("sql", "postgresql", "test.sql",
+  sql <- SqlRender::readSql(system.file("sql", "postgresql", "SubsetCdm.sql",
                                         package = "VaTools"))
   sql <- SqlRender::render(sql,
                            output_cdm_database_schema = outputCdmDatabaseSchema,
