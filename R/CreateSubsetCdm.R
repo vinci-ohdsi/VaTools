@@ -15,4 +15,8 @@ createSubsetCdmFromCohort <- function(connectionDetails,
 
   cat(sql)
 
+  connection <- DatabaseConnector::connect(connectionDetails = connectionDetails)
+  DatabaseConnector::executeSql(connection = connection,
+                                sql = sql)
+  DatabaseConnector::disconnect(connection = connection)
 }
