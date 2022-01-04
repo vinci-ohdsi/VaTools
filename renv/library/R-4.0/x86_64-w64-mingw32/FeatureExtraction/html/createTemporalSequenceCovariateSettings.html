@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create covariate settings</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for createTemporalSequenceCovariateSettings {FeatureExtraction}"><tr><td>createTemporalSequenceCovariateSettings {FeatureExtraction}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create covariate settings</h2>
+
+<h3>Description</h3>
+
+<p>Create covariate settings
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+createTemporalSequenceCovariateSettings(
+  useDemographicsGender = FALSE,
+  useDemographicsAge = FALSE,
+  useDemographicsAgeGroup = FALSE,
+  useDemographicsRace = FALSE,
+  useDemographicsEthnicity = FALSE,
+  useDemographicsIndexYear = FALSE,
+  useDemographicsIndexMonth = FALSE,
+  useConditionOccurrence = FALSE,
+  useConditionOccurrencePrimaryInpatient = FALSE,
+  useConditionEraStart = FALSE,
+  useConditionEraGroupStart = FALSE,
+  useDrugExposure = FALSE,
+  useDrugEraStart = FALSE,
+  useDrugEraGroupStart = FALSE,
+  useProcedureOccurrence = FALSE,
+  useDeviceExposure = FALSE,
+  useMeasurement = FALSE,
+  useMeasurementValue = FALSE,
+  useObservation = FALSE,
+  timePart = "month",
+  timeInterval = 1,
+  sequenceEndDay = -1,
+  sequenceStartDay = -730,
+  includedCovariateConceptIds = c(),
+  addDescendantsToInclude = FALSE,
+  excludedCovariateConceptIds = c(),
+  addDescendantsToExclude = FALSE,
+  includedCovariateIds = c()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>useDemographicsGender</code></td>
+<td>
+<p>Gender of the subject. (analysis ID 1)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsAge</code></td>
+<td>
+<p>Age of the subject on the index date (in years).
+(analysis ID 2)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsAgeGroup</code></td>
+<td>
+<p>Age of the subject on the index date (in 5 year age
+groups) (analysis ID 3)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsRace</code></td>
+<td>
+<p>Race of the subject. (analysis ID 4)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsEthnicity</code></td>
+<td>
+<p>Ethnicity of the subject. (analysis ID 5)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsIndexYear</code></td>
+<td>
+<p>Year of the index date. (analysis ID 6)</p>
+</td></tr>
+<tr valign="top"><td><code>useDemographicsIndexMonth</code></td>
+<td>
+<p>Month of the index date. (analysis ID 7)</p>
+</td></tr>
+<tr valign="top"><td><code>useConditionOccurrence</code></td>
+<td>
+<p>One covariate per condition in the
+condition_occurrence table starting in the time
+window. (analysis ID 101)</p>
+</td></tr>
+<tr valign="top"><td><code>useConditionOccurrencePrimaryInpatient</code></td>
+<td>
+<p>One covariate per condition observed as a primary
+diagnosis in an inpatient setting in the
+condition_occurrence table starting in the time
+window. (analysis ID 102)</p>
+</td></tr>
+<tr valign="top"><td><code>useConditionEraStart</code></td>
+<td>
+<p>One covariate per condition in the condition_era
+table starting in the time window. (analysis ID 201)</p>
+</td></tr>
+<tr valign="top"><td><code>useConditionEraGroupStart</code></td>
+<td>
+<p>One covariate per condition era rolled up to SNOMED
+groups in the condition_era table starting in the
+time window. (analysis ID 203)</p>
+</td></tr>
+<tr valign="top"><td><code>useDrugExposure</code></td>
+<td>
+<p>One covariate per drug in the drug_exposure table
+starting in the time window. (analysis ID 301)</p>
+</td></tr>
+<tr valign="top"><td><code>useDrugEraStart</code></td>
+<td>
+<p>One covariate per drug in the drug_era table
+starting in the time window. (analysis ID 401)</p>
+</td></tr>
+<tr valign="top"><td><code>useDrugEraGroupStart</code></td>
+<td>
+<p>One covariate per drug rolled up to ATC groups in
+the drug_era table starting in thetime window.
+(analysis ID 403)</p>
+</td></tr>
+<tr valign="top"><td><code>useProcedureOccurrence</code></td>
+<td>
+<p>One covariate per procedure in the
+procedure_occurrence table in the time window.
+(analysis ID 501)</p>
+</td></tr>
+<tr valign="top"><td><code>useDeviceExposure</code></td>
+<td>
+<p>One covariate per device in the device exposure
+table starting in the timewindow. (analysis ID 601)</p>
+</td></tr>
+<tr valign="top"><td><code>useMeasurement</code></td>
+<td>
+<p>One covariate per measurement in the measurement
+table in the time window. (analysis ID 701)</p>
+</td></tr>
+<tr valign="top"><td><code>useMeasurementValue</code></td>
+<td>
+<p>One covariate containing the value per
+measurement-unit combination in the time window. If
+multiple values are found, the last is taken.
+(analysis ID 702)</p>
+</td></tr>
+<tr valign="top"><td><code>useObservation</code></td>
+<td>
+<p>One covariate per observation in the observation
+table in the time window. (analysis ID 801)</p>
+</td></tr>
+<tr valign="top"><td><code>timePart</code></td>
+<td>
+<p>The interval scale ('DAY', 'MONTH', 'YEAR')</p>
+</td></tr>
+<tr valign="top"><td><code>timeInterval</code></td>
+<td>
+<p>Fixed interval length for timeId using the 'timePart' scale.  For example, a 'timePart' of DAY with 
+'timeInterval' 30 has timeIds where timeId 1 is day 0 to day 29, timeId 2 is day 30 to day 59, etc.</p>
+</td></tr>
+<tr valign="top"><td><code>sequenceEndDay</code></td>
+<td>
+<p>What is the end day (relative to the
+index date) of the data extraction?</p>
+</td></tr>
+<tr valign="top"><td><code>sequenceStartDay</code></td>
+<td>
+<p>What is the start day (relative to the
+index date) of the data extraction?</p>
+</td></tr>
+<tr valign="top"><td><code>includedCovariateConceptIds</code></td>
+<td>
+<p>A list of concept IDs that should be used to
+construct covariates.</p>
+</td></tr>
+<tr valign="top"><td><code>addDescendantsToInclude</code></td>
+<td>
+<p>Should descendant concept IDs be added to the list
+of concepts to include?</p>
+</td></tr>
+<tr valign="top"><td><code>excludedCovariateConceptIds</code></td>
+<td>
+<p>A list of concept IDs that should NOT be used to
+construct covariates.</p>
+</td></tr>
+<tr valign="top"><td><code>addDescendantsToExclude</code></td>
+<td>
+<p>Should descendant concept IDs be added to the list
+of concepts to exclude?</p>
+</td></tr>
+<tr valign="top"><td><code>includedCovariateIds</code></td>
+<td>
+<p>A list of covariate IDs that should be restricted
+to.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>creates an object specifying how covariates should be contructed from data in the CDM model.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An object of type <code>covariateSettings</code>, to be used in other functions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+settings &lt;- createTemporalSequenceCovariateSettings(useDemographicsGender = TRUE,
+                                            useDemographicsAge = FALSE,
+                                            useDemographicsAgeGroup = TRUE,
+                                            useDemographicsRace = TRUE,
+                                            useDemographicsEthnicity = TRUE,
+                                            useDemographicsIndexYear = TRUE,
+                                            useDemographicsIndexMonth = TRUE,
+                                            useConditionOccurrence = FALSE,
+                                            useConditionOccurrencePrimaryInpatient = FALSE,
+                                            useConditionEraStart = FALSE,
+                                            useConditionEraGroupStart = FALSE,
+                                            useDrugExposure = FALSE,
+                                            useDrugEraStart = FALSE,
+                                            useDrugEraGroupStart = FALSE,
+                                            useProcedureOccurrence = TRUE,
+                                            useDeviceExposure = TRUE,
+                                            useMeasurement = TRUE,
+                                            useMeasurementValue = FALSE,
+                                            useObservation = TRUE,
+                                            timePart = 'DAY',
+                                            timeInterval = 1,
+                                            sequenceEndDay = -1,
+                                            sequenceStartDay = -730,
+                                            includedCovariateConceptIds = c(),
+                                            addDescendantsToInclude = FALSE,
+                                            excludedCovariateConceptIds = c(),
+                                            addDescendantsToExclude = FALSE,
+                                            includedCovariateIds = c())
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>FeatureExtraction</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body></html>

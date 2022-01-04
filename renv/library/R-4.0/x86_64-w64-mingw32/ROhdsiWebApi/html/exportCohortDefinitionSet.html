@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Export cohort definition set from WebAPI</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for exportCohortDefinitionSet {ROhdsiWebApi}"><tr><td>exportCohortDefinitionSet {ROhdsiWebApi}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Export cohort definition set from WebAPI</h2>
+
+<h3>Description</h3>
+
+<p>Export cohort definition set from WebAPI
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+exportCohortDefinitionSet(baseUrl, cohortIds, generateStats = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>baseUrl</code></td>
+<td>
+<p>The base URL for the WebApi instance, for example:
+&quot;http://server.org:80/WebAPI&quot;.</p>
+</td></tr>
+<tr valign="top"><td><code>cohortIds</code></td>
+<td>
+<p>A set of cohortIds to fetch from WebApi.</p>
+</td></tr>
+<tr valign="top"><td><code>generateStats</code></td>
+<td>
+<p>Should cohort inclusion rule statistics be generated?</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Constructs a CohortDefinition set containing the following fields: </p>
+
+<dl>
+<dt>atlasId</dt><dd><p>The cohort ID in
+ATLAS.</p>
+</dd> <dt>cohortId</dt><dd><p>a copy of the value in atlasId.</p>
+</dd> <dt>cohortName</dt><dd><p>The name of the cohort.</p>
+</dd>
+<dt>sql</dt><dd><p>The cohort generation sql.</p>
+</dd> <dt>json</dt><dd><p>The cohort definition JSON.</p>
+</dd>
+<dt>logicDescription</dt><dd><p>The cohort description.</p>
+</dd></dl>
+
+
+<hr /><div style="text-align: center;">[Package <em>ROhdsiWebApi</em> version 1.3.0 <a href="00Index.html">Index</a>]</div>
+</body></html>
