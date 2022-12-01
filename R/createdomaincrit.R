@@ -8,8 +8,8 @@
 #     Requires
 #           DatabaseConnector
 #           Sqlrender
-#     This process can fail for a number of reasons, the most common of which are 
-#             (1) an issue with the SQL; 
+#     This process can fail for a number of reasons, the most common of which are
+#             (1) an issue with the SQL;
 #             (2) an issue with the connection; I think this causes issues with not dropping temp tables between subsequent cohorts
 #                     This could likely be fixed with a closing of the connection between cohort runs
 #
@@ -20,10 +20,10 @@
 AllCodesets<-function(path, connectionDetails, cohortDatabaseSchema, rebuild=TRUE){
   ##get all the files in a folder
   files<-list.files(path, full.names = TRUE)
-  
+
   ### Get just the files that end in .sql
   files<-files[grep('.sql', files)] #if this is the CTE folder, then none should be removed
-  
+
   ### Get the actual cohorts from the files (assuming that removing the path and .sql will return the cohort number)
   cohorts_files<-gsub('.sql','',gsub(paste(path, '/', sep=""), '', files))
   cohorts_files<-as.numeric(cohorts_files)
@@ -32,13 +32,13 @@ AllCodesets<-function(path, connectionDetails, cohortDatabaseSchema, rebuild=TRU
   connection <- DatabaseConnector::connect(connectionDetails)
   if (DatabaseConnector::existsTable(connection,cohortDatabaseSchema,'AllCodeSets')){
     print('An existing codeset table already exists.')
-    
+
     ##if exists, pull in existing table and compare number of cohort_definition_ids to number of cohorts in folder
     codesetsql<-sprintf("SELECT cohort_definition_ID, COUNT(*) conceptct
                           FROM %s
                           GROUP BY cohort_definition_ID
                           ORDER BY cohort_definition_ID", paste(cohortDatabaseSchema, '.','AllCodeSets', sep=""))
-    
+
     codesettable<-DatabaseConnector::querySql(connection, codesetsql)
     currentcodesets<-codesettable$COHORT_DEFINITION_ID
     if (identical(intersect(cohorts_files,currentcodesets),cohorts_files)){
@@ -51,7 +51,7 @@ AllCodesets<-function(path, connectionDetails, cohortDatabaseSchema, rebuild=TRU
   }
   DatabaseConnector::disconnect(connection)
   #rebuild<-TRUE
-  
+
   ###build table
   connection <- DatabaseConnector::connect(connectionDetails)
   if (DatabaseConnector::existsTable(connection,cohortDatabaseSchema,'AllCodeSets')==FALSE|rebuild==TRUE){
@@ -69,9 +69,9 @@ CREATE TABLE %s (
     createtable<-executeSql(connection, createtablesql, progressBar = TRUE, reportOverallTime = TRUE)
   }
   DatabaseConnector::disconnect(connection)
-  
+
   ### get all codesets (all sql script before 2nd semi-colon)
-  
+
   ############# Loop through files and run part of each SQL query ############
   start<-Sys.time()
   for (i in 1:length(files)){
@@ -90,7 +90,7 @@ CREATE TABLE %s (
 FROM #Codesets a
 INNER JOIN CDW_OMOP.OMOPV5.concept c
 on a.concept_id = c.CONCEPT_ID; ', as.character(cohorts_files[i])), sep="\n")
-    
+
     print(paste0('Executing SQL Codeset Creation of Cohort ID: ',as.character(cohorts_files[i]), sep=""))
     ##execute sql in database
     R.utils::withTimeout(DatabaseConnector::executeSql(connection, sql, progressBar = TRUE, reportOverallTime = TRUE),
@@ -100,7 +100,7 @@ on a.concept_id = c.CONCEPT_ID; ', as.character(cohorts_files[i])), sep="\n")
   }
   end<-Sys.time()
   print(paste('Total time to run all codesets was ', end-start, sep = ""))
-  
+
   ### Pull into R AllCodesets table
   ##if exists, pull in existing table and compare number of cohort_definition_ids to number of cohorts in folder
   Allcodesetsql<-sprintf("SELECT *
@@ -122,9 +122,10 @@ on a.concept_id = c.CONCEPT_ID; ', as.character(cohorts_files[i])), sep="\n")
 #
 ############################################################################################
 
+#' @export
 createDomaincrit<-function(){
   domains<-c('Measurement', 'Condition', 'Drug', 'Visit', 'Device', 'Observation', 'Procedure')
-  
+
   beginnings<-c(
     '-- Begin Measurement Criteria'
     ,'-- Begin Condition Occurrence Criteria'
@@ -134,7 +135,7 @@ createDomaincrit<-function(){
     ,'-- Begin Observation Criteria'
     ,'-- Begin Procedure Occurrence Criteria'
   )
-  
+
   ends<-c(
     '-- End Measurement Criteria'
     ,'-- End Condition Occurrence Criteria'
@@ -144,7 +145,7 @@ createDomaincrit<-function(){
     ,'-- End Observation Criteria'
     ,'-- End Procedure Occurrence Criteria'
   )
-  
+
   domaincrit<-as.data.frame(cbind(domains,beginnings,ends))
   return(domaincrit)
 }
