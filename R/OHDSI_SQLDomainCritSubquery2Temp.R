@@ -215,9 +215,18 @@ translateToCustomVaSql <- function(ogfilepath,
     }
   }
 
-
   ##combine sql parts all back together
   newsql<-paste(sqlparts, collapse="\r\n")
+
+  # Delete temp tables
+  deleteString <- paste(
+    lapply(locs$tablenames, function(tmpTableName) {
+      paste0("TRUNCATE TABLE ", tmpTableName, ";\n",
+             "DROP TABLE ", tmpTableName, ";\n")
+    }),
+    collapse = "\n")
+
+  newsql <- paste(newsql, "\n-- DELETE TEMP TABLES\n", deleteString, collapse = "\n")
 
   SqlRender::writeSql(newsql, targetFile=newfilepath)
 }
