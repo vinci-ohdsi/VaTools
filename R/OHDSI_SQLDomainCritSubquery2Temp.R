@@ -220,7 +220,7 @@ translateToCustomVaSql <- function(ogfilepath,
 
   # Delete temp tables
   deleteString <- paste(
-    lapply(locs$tablenames, function(tmpTableName) {
+    lapply(unique(locs$tablenames), function(tmpTableName) {
       paste0("TRUNCATE TABLE ", tmpTableName, ";\n",
              "DROP TABLE ", tmpTableName, ";\n")
     }),
