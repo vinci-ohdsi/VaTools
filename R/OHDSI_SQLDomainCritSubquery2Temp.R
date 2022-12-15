@@ -107,6 +107,10 @@ translateToCustomVaSql <- function(ogfilepath,
     dplyr::arrange(as.numeric(startlocs)) %>% ##order by character location in script
     dplyr::mutate(critord=dplyr::row_number())
 
+  if (nrow(locs) == 0) {
+    SqlRender::writeSql(sql, targetFile=newfilepath)
+    return()
+  }
 
   ##### ALTER SQL
   #Extract subquery of domain criteria,
