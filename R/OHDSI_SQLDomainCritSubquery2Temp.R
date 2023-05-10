@@ -65,11 +65,21 @@
 #
 #function
 
+
 #' @importFrom dplyr %>%
 #' @export
 translateToCustomVaSql <- function(ogfilepath,
                                    domainsInfile,
                                    newfilepath) {
+  sql <- SqlRender::readSql(ogfilepath)
+  newsql <- translateToCustomVaSql(sql, domainsInfile)
+  SqlRender::writeSql(newsql, targetFile=newfilepath)
+}
+
+#' @importFrom dplyr %>%
+#' @export
+translateToCustomVaSqlText <- function(sql,
+                                   domainsInfile) {
   # library(dplyr)
   ##Pull in SQL file
   sql <- SqlRender::readSql(ogfilepath)
@@ -232,7 +242,7 @@ translateToCustomVaSql <- function(ogfilepath,
 
   newsql <- paste(newsql, "\n-- DELETE TEMP TABLES\n", deleteString, collapse = "\n")
 
-  SqlRender::writeSql(newsql, targetFile=newfilepath)
+  return(newsql)
 }
 
 
