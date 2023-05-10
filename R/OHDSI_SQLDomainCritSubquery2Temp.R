@@ -65,14 +65,24 @@
 #
 #function
 
+
 #' @importFrom dplyr %>%
 #' @export
 translateToCustomVaSql <- function(ogfilepath,
                                    domainsInfile,
                                    newfilepath) {
+  sql <- SqlRender::readSql(ogfilepath)
+  newsql <- translateToCustomVaSql(sql, domainsInfile)
+  SqlRender::writeSql(newsql, targetFile=newfilepath)
+}
+
+#' @importFrom dplyr %>%
+#' @export
+translateToCustomVaSqlText <- function(sql,
+                                   domainsInfile) {
   # library(dplyr)
   ##Pull in SQL file
-  sql <- SqlRender::readSql(ogfilepath)
+
 
   ##get all possible OMOP domains for sql file
   # source("D:/OHDSI/bv/CustomCohortExecution/createdomaincrit.R")
@@ -107,6 +117,10 @@ translateToCustomVaSql <- function(ogfilepath,
     dplyr::arrange(as.numeric(startlocs)) %>% ##order by character location in script
     dplyr::mutate(critord=dplyr::row_number())
 
+  if (nrow(locs) == 0) {
+    SqlRender::writeSql(sql, targetFile=newfilepath)
+    return()
+  }
 
   ##### ALTER SQL
   #Extract subquery of domain criteria,
@@ -228,7 +242,7 @@ translateToCustomVaSql <- function(ogfilepath,
 
   newsql <- paste(newsql, "\n-- DELETE TEMP TABLES\n", deleteString, collapse = "\n")
 
-  SqlRender::writeSql(newsql, targetFile=newfilepath)
+  return(newsql)
 }
 
 
