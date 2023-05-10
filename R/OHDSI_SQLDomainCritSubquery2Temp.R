@@ -82,7 +82,7 @@ translateToCustomVaSqlText <- function(sql,
                                    domainsInfile) {
   # library(dplyr)
   ##Pull in SQL file
-  sql <- SqlRender::readSql(ogfilepath)
+
 
   ##get all possible OMOP domains for sql file
   # source("D:/OHDSI/bv/CustomCohortExecution/createdomaincrit.R")
