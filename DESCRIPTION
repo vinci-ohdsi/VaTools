@@ -1,7 +1,7 @@
 Package: VaTools
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.2.1
+Version: 0.3.0
 Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
@@ -10,10 +10,10 @@ License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 Depends:
-  R (>= 4.0),
+  R (>= 4.4),
   DatabaseConnector (>= 3.0.0)
 Imports:
 	SqlRender (>= 1.6.6),
 	stringr,
 	dplyr
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
