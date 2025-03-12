@@ -1,5 +1,5 @@
 
-library(CovidVaccineSafety)
+# library(CovidVaccineSafety)
 
 ############# Prepare COhort SQL files using package functions prepareCohortSql() ###
 
@@ -66,12 +66,12 @@ for (f in 1:length(files)){
   posdomains<-codesettable %>%
     filter(COHORT_DEFINITION_ID==cohorts_files[f]) %>%
     distinct(DOMAIN_ID)
-  
+
   domainsInfile<-posdomains$DOMAIN_ID
   newfile<-paste(customsqlfolder,"/",cohorts_files[f], ".sql", sep="")
-  
-  VAcustomSQL(ogfilepath=files[f], 
-              domainsInfile=domainsInfile, 
+
+  VAcustomSQL(ogfilepath=files[f],
+              domainsInfile=domainsInfile,
               newfilepath=newfile)
   }
 
@@ -81,9 +81,9 @@ pathtoSQL<-paste0(outputFolder,"/customSQL")
 source("D:/OHDSI/bv/CustomCohortExecution/CustomSQL_FunctionsBV.R")
 st<-Sys.time()
 print(paste("process started at ", st))
-SQLCohortsCreate(path = pathtoSQL, 
-                 timeoutInSeconds = 300, 
-                 cohortDatabaseSchema, 
+SQLCohortsCreate(path = pathtoSQL,
+                 timeoutInSeconds = 300,
+                 cohortDatabaseSchema,
                  cohortTable,
                  connectionDetails)  ##this function still freezes R sometimes, likely due to issues with underlying SQL scripts
 #started around 11:20PM
