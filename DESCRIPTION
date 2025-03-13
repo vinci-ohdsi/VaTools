@@ -1,9 +1,9 @@
 Package: VaTools
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.3.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Version: 0.4.0
+Author: Marc A Suchard, Benjamin Viernes
+Maintainer: Marc A Suchard <marc.suchard@va.gov>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
