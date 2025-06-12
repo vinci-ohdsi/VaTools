@@ -3,6 +3,7 @@
 export(createCohorts)
 export(createDomaincrit)
 export(createIndexes)
+export(createStandardCdmSchema)
 export(createSubsetCdmFromCohort)
 export(refactor)
 export(translateToCustomVaSql)
