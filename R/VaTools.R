@@ -20,3 +20,8 @@
 #' @import DatabaseConnector
 #' @import SqlRender
 NULL
+
+.onLoad <- function(libname, pkgname) {
+  jarLocation <- system.file("java/VaTools.jar", package = "BeastJar")
+  rJava::.jpackage(pkgname, lib.loc = libname, morePaths = jarLocation)
+}

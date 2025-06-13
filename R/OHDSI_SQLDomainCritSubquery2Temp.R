@@ -76,6 +76,18 @@ translateToCustomVaSql <- function(ogfilepath,
   SqlRender::writeSql(newsql, targetFile=newfilepath)
 }
 
+#' @export
+translateToCustomVaSqlUsingJava <- function(sql,
+                                            refactorCriteria = FALSE) {
+  if (refactorCriteria) {
+    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql2", sql)
+  } else {
+    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql", sql)
+  }
+
+  return(result)
+}
+
 #' @importFrom dplyr %>%
 #' @export
 translateToCustomVaSqlText <- function(sql,
