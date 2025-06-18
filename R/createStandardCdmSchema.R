@@ -13,7 +13,7 @@
 createStandardCdmSchema <- function(connectionDetails,
                                     database,
                                     startingSchema,
-                                    destinationSchema = "OMPV5",
+                                    destinationSchema = "OMOPV5",
                                     tableNamePrefix = "OMOPV5_") {
 
   connection <- DatabaseConnector::connect(connectionDetails)
