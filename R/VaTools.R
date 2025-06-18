@@ -22,6 +22,6 @@
 NULL
 
 .onLoad <- function(libname, pkgname) {
-  jarLocation <- system.file("java/VaTools.jar", package = "BeastJar")
+  jarLocation <- system.file("java/VaTools.jar", package = "VaTools")
   rJava::.jpackage(pkgname, lib.loc = libname, morePaths = jarLocation)
 }

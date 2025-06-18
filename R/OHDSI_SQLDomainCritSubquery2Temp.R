@@ -78,11 +78,23 @@ translateToCustomVaSql <- function(ogfilepath,
 
 #' @export
 translateToCustomVaSqlUsingJava <- function(sql,
-                                            refactorCriteria = FALSE) {
-  if (refactorCriteria) {
-    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql2", sql)
+                                            refactorDomainCriteria = TRUE,
+                                            refactorNestedCriteria = TRUE,
+                                            refactorPrimaryEvents = TRUE, # TODO currently FALSE not implemented
+                                            addIndicesToDomainCriteria = TRUE,
+                                            addIndicesToNestedCriteria = FALSE
+                                            ) {
+
+  config <- rJava::.jcast(
+    rJava::.jnew("org.ohdsi.sql.RSqlRefactorConfig",
+                 refactorDomainCriteria, refactorNestedCriteria, refactorPrimaryEvents,
+                 addIndicesToDomainCriteria, addIndicesToNestedCriteria),
+    "org.ohdsi.sql.SqlRefactorConfig")
+
+  if (refactorNestedCriteria) {
+    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql2", sql, config)
   } else {
-    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql", sql)
+    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql", sql, config)
   }
 
   return(result)

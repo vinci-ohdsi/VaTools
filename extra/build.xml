@@ -50,7 +50,8 @@
                includeantruntime="false"
                memoryinitialsize="256m"
                memorymaximumsize="1024m">
-            <include name="org/ohdsi/sql/**"/>          
+            <include name="org/ohdsi/sql/**"/>
+            <exclude name="org/ohdsi/sql/SpringSqlRefactorConfig.java"/>
         </javac>
         <echo message="Successfully compiled."/>
     </target>
