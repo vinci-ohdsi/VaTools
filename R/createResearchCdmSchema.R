@@ -1,10 +1,11 @@
 #' Create a research CDM schema with filtered views from CDW OMOP and supplied cohort table
 #'
 #' @param connectionDetails DatabaseConnector connection details
-#' @param database Database in which to create the new views
-#' @param startingSchema Schema containing provisioned CDM views (e.g. "src")
-#' @param destinationSchema Destination schema for compliant views
-#' @param tableNamePrefix Prefix of non-standard view names (e.g. "omopv5_")
+#' @param sourceDatabase Database name for existing cdw tables
+#' @param sourceSchema Schema name for existing cdw tables
+#' @param targetDatabase Research database name
+#' @param targetSchema Research schema name
+#' @param cohortSchema Schema of provisioned cohort 
 #'
 #' @returns invisible NULL
 #' @export
