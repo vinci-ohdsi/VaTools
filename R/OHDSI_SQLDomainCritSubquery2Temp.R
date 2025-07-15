@@ -91,11 +91,7 @@ translateToCustomVaSqlUsingJava <- function(sql,
                  addIndicesToDomainCriteria, addIndicesToNestedCriteria),
     "org.ohdsi.sql.SqlRefactorConfig")
 
-  if (refactorNestedCriteria) {
-    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql2", sql, config)
-  } else {
-    result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql", sql, config)
-  }
+  result <- rJava::J("org.ohdsi.sql.SqlCteRefactor", "translateToCustomVaSql", sql, config)
 
   return(result)
 }
