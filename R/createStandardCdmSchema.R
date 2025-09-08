@@ -37,21 +37,39 @@ createStandardCdmSchema <- function(connectionDetails,
   connection <- DatabaseConnector::connect(connectionDetails)
   on.exit(DatabaseConnector::disconnect(connection))
 
-  ## Get list of OMOP table names except person 
+  DatabaseConnector::executeSql(
+    connection,
+    sprintf("use %s;",
+            database)
+    )
+  
+  ## Get list of OMOP table names except cohortperson_id
   tables <- DatabaseConnector::dbListTables(
     connection,
     paste0(database, ".", startingSchema)
   )
   tables <- tables[grepl(tableNamePrefix, tables, ignore.case = TRUE)]
-  tables <- tables[tolower(tables) != paste0(tolower(tableNamePrefix), "person")]
+  tables <- tables[tables != paste0(tableNamePrefix, "cohortperson_id")]
+
+  ## list of column names (except cohortName) in each provisioned CDM view 
+  columns <- lapply(
+    tables,
+    \(x) {
+      cols <- DatabaseConnector::renderTranslateQuerySql(
+        connection,
+        "SELECT name
+         FROM sys.columns
+         WHERE object_id = OBJECT_ID('@startingSchema.@x')",
+        startingSchema = startingSchema,
+        x = x) |>
+        dplyr::pull(1)
+    })
+  names(columns) <- tables
+  columns <- lapply(
+    columns,
+    \(x) x[tolower(x) != 'cohortname']) 
 
   ## Create schema if it doesn't exist
-  DatabaseConnector::executeSql(
-    connection,
-    sprintf("use %s;",
-            database)
-  )
-
   schemas <- DatabaseConnector::querySql(
     connection,
     "select * from sys.schemas"
@@ -74,52 +92,30 @@ createStandardCdmSchema <- function(connectionDetails,
 
   ## Create views with CDM compliant names
   for(x in tables) {
-    newViewTableName <- gsub(tableNamePrefix,
+    newViewName <- gsub(tableNamePrefix,
                              "",
                              x,
                              ignore.case = TRUE)
-
-    newViewName <- paste0(destinationSchema, ".", newViewTableName)
+    
+    newViewName <- paste0(destinationSchema, ".", newViewName)
     oldViewName <- paste0(startingSchema, ".", x)
     if (verbose) message(sprintf("%s -> %s", oldViewName, newViewName))
-
-    DatabaseConnector::executeSql(
-      connection,
-      sprintf("create view %s as
-              select *
-              from %s",
-              newViewName,
-              oldViewName)
-    )
-  }
-
-  ## Person table
-  personColumnNames <- DatabaseConnector::renderTranslateQuerySql(
-    connection,
-    "SELECT name
-     FROM sys.columns
-     WHERE object_id = OBJECT_ID('@startingSchema.@tableNamePrefixperson')",
-    startingSchema = startingSchema,
-    tableNamePrefix = tableNamePrefix) |>
-    dplyr::pull(1)
-  
-  personColumnNames <- personColumnNames[tolower(personColumnNames) != "cohortname"]
-  personColumnNames <- paste0(personColumnNames, collapse = ", ")
-
-  DatabaseConnector::renderTranslateExecuteSql(
-    connection,
-    "create view @destinationSchema.person as
-     select distinct @personColumnNames 
-     from @startingSchema.@tableNamePrefixperson
-     {@includeAllCohorts == FALSE} ? {where @cohortColumnName in (@cohortsToInclude)}" ,
-    destinationSchema = destinationSchema,
-    personColumnNames = personColumnNames,
-    tableNamePrefix = tableNamePrefix,
-    startingSchema = startingSchema,
-    cohortColumnName = cohortColumnName,
-    cohortsToInclude = paste0("'", cohortsToInclude, "'", collapse = ", "),
-    includeAllCohorts = includeAllCohorts
-  ) 
     
+    DatabaseConnector::renderTranslateExecuteSql(
+      connection, 
+      "create view @newViewName  as
+       select distinct @colsSql
+       from @oldViewName
+       {@includeAllCohorts == FALSE & 'columnname' %in% @cols} ? 
+         {where cohortName in (@cohortsToInclude)}",
+      newViewName = newViewName,
+      cols = tolower(columns[[x]]),
+      colsSql = paste0(columns[[x]], collapse = ", "),
+      oldViewName = oldViewName,
+      includeAllCohorts = includeAllCohorts,
+      cohortsToInclude = paste0("'", cohortsToInclude, "'", collapse = ", "))
+    }
+  
   invisible(NULL)
 }
+ 
