@@ -1,0 +1,64 @@
+#+TITLE: VaTools Guide
+#+AUTHOR: Marc A. Suchard & William J. O'Brien
+#+DATE: 2025-09-09
+#+startup indent 
+
+* Introduction
+
+VaTools is an R package with features that enable OHDSI studies to be done within the standard VINCI workspace. This public repository contains no private or sensitive information.
+
+* Features 
+
+** SQL Refactoring
+
+TODO 
+
+** Compliant OMOP CDM
+
+The `createStandardCdmSchema` function does two crucial things that allow Hades packages to run:
+
+1. It gives the OMOP CDM views standard names. The provisioned PERSON view, for example, is called ORD_Researcher_xyz.src.omopv5_person. This would cause errors in study execution, therefore a new view will be created, called ORD_Researcher_xyz.omopv5.person
+   
+2. It de-duplicates the provisioned CDM views if multiple VINCI cohorts were provisioned. The default paramters include all provisioned cohorts, but there are options to retain only certain cohorts.
+
+* How to use
+
+VaTools should be included in the `renv` library of github.com/vinci-ohdsi/ohdsiProjectTemplate. This repository is an all-in-one R package that the researcher downloads (tip: click the green "Code" button above and "Download zip"), uploads to their standard workspace, unzips, then launches in RStudio. It contains all software dependencies to run a Hades-based study, including Java Development Kit and the DatabaseConnector jar. 
+
+** Create the compliant OMOP CDM
+
+Within your VINCI standard workspace, launch RStudio and open the ohdsiProjectTemplate project.
+
+Run the following function, replacing the database name with your actual database name. If you want to include all cohorts that were provisioned to the project by the VINCI data manager, just use all of the default arguments, as follows: 
+
+#+begin_src R :eval no
+  library(DatabaseConnector)
+  library(VaTools)
+
+  connectionDetails <- createConnectionDetails(
+    dbms = "sql server",
+    server = "my_server"
+  )
+
+  createStandardCdmSchema(
+    connectionDetails,
+    "ORD_Researcher_xyz"
+  ) 
+
+#+end_src
+
+Now go into your SQL client (e.g. SSMS), refresh your database's views, and you should see a new schema called OMOPV5 with properly named views such as person, drug_exposure, and condition_occurrence. 
+
+If you have some reason to include only certain provisioned cohorts, specify them as such:
+
+#+begin_src R :eval no
+  createStandardCdmSchema(
+    connectionDetails,
+    "ORD_Researcher_xyz",
+    includeAllCohorts = FALSE,
+    cohortsToInclude = c("Primary", "20230125") 
+  ) 
+
+#+end_src
+
+
