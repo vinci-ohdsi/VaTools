@@ -1,7 +1,7 @@
 #+TITLE: VaTools Guide
 #+AUTHOR: Marc A. Suchard & William J. O'Brien
 #+DATE: 2025-09-09
-#+startup indent 
+#+startup: indent 
 
 * Introduction
 
