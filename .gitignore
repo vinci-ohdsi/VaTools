@@ -1,3 +1,7 @@
 .Rprofile
 .Rhistory
 .Rproj.user
+
+extra
+*.json
+*.sql

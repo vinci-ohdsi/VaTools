@@ -7,9 +7,14 @@
 createStandardCdmSchema(
   connectionDetails,
   database,
-  startingSchema,
-  destinationSchema = "OMPV5",
-  tableNamePrefix = "OMOPV5_"
+  startingSchema = "src",
+  destinationSchema = "OMOPV5",
+  tableNamePrefix = "OMOPV5_",
+  cohortColumnName = "CohortName",
+  authorization = paste0("u", database),
+  includeAllCohorts = TRUE,
+  cohortsToInclude = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -21,11 +26,26 @@ createStandardCdmSchema(
 
 \item{destinationSchema}{Destination schema for compliant views}
 
-\item{tableNamePrefix}{Prefix of non-standard view names (e.g. "omopv5_")}
+\item{tableNamePrefix}{Prefix of non-standard view names (e.g. "omopv5_", "omop_dod_" or "omopv5mill_")}
+
+\item{cohortColumnName}{Cohort table name in VINCI-provisioned person table}
+
+\item{authorization}{Authorization group for created schema}
+
+\item{includeAllCohorts}{Logical}
+
+\item{cohortsToInclude}{If includeAllCohorts is FALSE, which values of cohortName to include?}
+
+\item{verbose}{Print progress to console}
 }
 \value{
 invisible NULL
 }
 \description{
-Create standard CDM schema
+VINCI-provisioned OMOP CDM views have non-standard names (ORD_Researcher_xyz.src.omopv5_person).
+This function creates properly named views (ORD_Researcher_xyz.omopv5.person) that work with Hades packages.
+The provisioned PERSON table may also have more than one record per person, which causes errors with feature
+extraction and CohortMethod estimation. If includeAllCohorts is TRUE, the person table will be de-duped and all
+distinct person_id values included. In cases where the researcher wants to limit to selected VINCI-provisioned
+cohorts, cohortsToInclude can be specified.
 }
