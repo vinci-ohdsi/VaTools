@@ -1,7 +1,7 @@
 Package: VaTools
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.5.1
+Version: 0.5.2
 Author: Marc A Suchard, Benjamin Viernes
 Maintainer: Marc A Suchard <marc.suchard@va.gov>
 Description: More about what it does (maybe more than one line)
